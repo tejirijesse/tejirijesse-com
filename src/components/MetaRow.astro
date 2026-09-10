@@ -34,7 +34,9 @@ const parts = [sector, years, status, role].filter(Boolean) as string[];
     gap: 0 var(--s1);
     margin: 0;
   }
+  /* The separator is text and must clear AA like any other text;
+     --rule is a hairline colour and reads as absent at this size. */
   .dot {
-    color: var(--rule);
+    color: var(--muted);
   }
 </style>
