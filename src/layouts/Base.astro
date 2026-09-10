@@ -1,6 +1,7 @@
 ---
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
+import { href } from '../lib/href';
 
 /**
  * Clause 03. Global nav: Tejiri Jesse top-left linking home, About and CV
@@ -11,7 +12,17 @@ interface Props {
   description: string;
 }
 const { title, description } = Astro.props;
-const path = Astro.url.pathname;
+const sans = href('/fonts/ibm-plex-sans-latin.woff2');
+const mono = href('/fonts/ibm-plex-mono-latin-400.woff2');
+
+// Clause 13: two files, both preloaded. Written here rather than in the
+// stylesheet so the URLs pick up the deployment base.
+const fontFaces = `
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-weight:400 600;font-display:block;src:url('${sans}') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:400;font-display:block;src:url('${mono}') format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+`.trim();
+
+const path = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
 ---
 
 <html lang="en">
@@ -23,20 +34,9 @@ const path = Astro.url.pathname;
     <link rel="canonical" href={new URL(path, Astro.site)} />
 
     <!-- Clause 13: two font files, preloaded. -->
-    <link
-      rel="preload"
-      href="/fonts/ibm-plex-sans-latin.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/ibm-plex-mono-latin-400.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    <link rel="preload" href={sans} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={mono} as="font" type="font/woff2" crossorigin />
+    <style is:inline set:html={fontFaces}></style>
     <!-- Clause 14: no analytics, no third-party scripts of any kind. -->
   </head>
 
@@ -45,12 +45,12 @@ const path = Astro.url.pathname;
 
     <header>
       <nav class="wrap nav" aria-label="Primary">
-        <a class="home" href="/" aria-current={path === '/' ? 'page' : undefined}>
+        <a class="home" href={href("/")} aria-current={path === '/' ? 'page' : undefined}>
           Tejiri Jesse
         </a>
         <span class="right">
-          <a href="/about" aria-current={path === '/about' ? 'page' : undefined}>About</a>
-          <a href="/cv" aria-current={path === '/cv' ? 'page' : undefined}>CV</a>
+          <a href={href("/about")} aria-current={path === '/about' ? 'page' : undefined}>About</a>
+          <a href={href("/cv")} aria-current={path === '/cv' ? 'page' : undefined}>CV</a>
         </span>
       </nav>
     </header>

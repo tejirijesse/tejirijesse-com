@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { href } from '../lib/href';
 
 /**
  * Clause 07. Rendered as HTML at measure width, plus a downloadable PDF.
@@ -11,7 +12,7 @@ import Base from '../layouts/Base.astro';
  * Content is owner-supplied and must match the submitted application CV
  * exactly, including every figure — clause 07 and rule 15.1.
  */
-const pdf = '/cv/oghenetejiri-jesse-cv.pdf';
+const pdf = href('/cv/oghenetejiri-jesse-cv.pdf');
 ---
 
 <Base

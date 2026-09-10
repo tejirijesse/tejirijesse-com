@@ -5,6 +5,7 @@ import Base from '../layouts/Base.astro';
 import MetaRow from '../components/MetaRow.astro';
 import FilmBlock from '../components/FilmBlock.astro';
 import NextProject from '../components/NextProject.astro';
+import { href } from '../lib/href';
 
 /**
  * Clause 05. One template, five uses. Long-form, single column,
@@ -83,7 +84,7 @@ const { Content } = await render(project);
         )
       }
 
-      <NextProject href={`/${next.id}`} name={next.data.name} />
+      <NextProject href={href(next.id)} name={next.data.name} />
     </div>
   </article>
 </Base>

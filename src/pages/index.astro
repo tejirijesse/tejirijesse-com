@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ProjectFrame from '../components/ProjectFrame.astro';
 import { thesis, PENDING } from '../copy';
+import { href } from '../lib/href';
 
 /**
  * Clause 04. One sentence, five framed projects, footer.
@@ -35,7 +36,7 @@ if (!thesis.startsWith(PENDING) && words > 22) {
     {
       projects.map((project, i) => (
         <ProjectFrame
-          href={`/${project.id}`}
+          href={href(project.id)}
           image={project.data.indexImage}
           alt={project.data.indexAlt}
           caption={project.data.indexCaption}

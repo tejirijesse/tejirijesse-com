@@ -1,0 +1,60 @@
+# Preview deployment only. The deliverable is Vercel on the apex domain, per
+# clause 14; this publishes the same commit to a GitHub Pages subpath so the
+# site can be read before the domain is pointed anywhere.
+#
+# PAGES_BASE is what makes the subpath work. Without it astro.config.mjs
+# builds for the apex, which is the correct default.
+name: Preview on GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Clause 15. The build already fails on a missing section or an
+      # uncaptioned image; this prints the clause 17 freeze blockers into the
+      # run log so the outstanding list is visible without checking out.
+      - name: Content discipline
+        run: npm run check || true
+
+      - name: Build
+        run: npm run build
+        env:
+          PAGES_BASE: /${{ github.event.repository.name }}
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

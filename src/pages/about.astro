@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { aboutIntro, essay, PENDING } from '../copy';
+import { href } from '../lib/href';
 
 /**
  * Clause 06. Not a biography. 600 to 800 words, first person, plus one short
@@ -49,7 +50,7 @@ const pending = aboutIntro.startsWith(PENDING);
       <p>
         <strong>TO WRITE — Tejiri.</strong> Clause 06: if OTJ Capital is not
         given its own frame, its one-sentence status note lives here. It
-        currently has a frame at <a class="link" href="/otj">/otj</a>, so this
+        currently has a frame at <a class="link" href={href("/otj")}>/otj</a>, so this
         section comes out — or the frame does. One of the two, before freeze.
       </p>
     </div>
