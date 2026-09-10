@@ -1,0 +1,62 @@
+---
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+/**
+ * Clause 10. Two to four inline images side by side at >= 900px, stacked
+ * below, one shared caption. Used for iteration sequences — the year-on-year
+ * screens in section 10, per clause 05.
+ *
+ * Deliberately not a carousel. A sequence you can see all of at once is an
+ * argument; one you have to click through is a slideshow.
+ */
+interface Props {
+  items: { src: ImageMetadata; alt: string }[];
+  caption: string;
+}
+const { items, caption } = Astro.props;
+
+if (items.length < 2 || items.length > 4) {
+  throw new Error(
+    `FigureSequence takes two to four images, per clause 10. Got ${items.length}.`
+  );
+}
+---
+
+<figure style={`--count: ${items.length}`}>
+  <div class="row">
+    {
+      items.map((item) => (
+        <Picture
+          src={item.src}
+          alt={item.alt}
+          formats={['avif']}
+          fallbackFormat="webp"
+          widths={[400, 640, 900]}
+          sizes="(min-width: 900px) 22vw, 100vw"
+          loading="lazy"
+          decoding="async"
+          data-fade
+        />
+      ))
+    }
+  </div>
+  <figcaption class="caption">{caption}</figcaption>
+</figure>
+
+<style>
+  figure {
+    margin: var(--s5) 0;
+    max-width: var(--measure);
+  }
+  .row {
+    display: grid;
+    gap: var(--s2);
+  }
+  @media (min-width: 900px) {
+    .row {
+      grid-template-columns: repeat(var(--count), 1fr);
+      align-items: start;
+    }
+  }
+</style>

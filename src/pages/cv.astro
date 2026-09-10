@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+
+/**
+ * Clause 07. Rendered as HTML at measure width, plus a downloadable PDF.
+ *
+ * No skills bars, no percentage proficiency graphics, no star ratings, no icon
+ * rows, no timeline graphic. A CV is a document; every one of those devices
+ * converts information a reader can check into a picture they cannot.
+ *
+ * Content is owner-supplied and must match the submitted application CV
+ * exactly, including every figure — clause 07 and rule 15.1.
+ */
+const pdf = '/cv/oghenetejiri-jesse-cv.pdf';
+---
+
+<Base
+  title="CV — Oghenetejiri Jesse"
+  description="Curriculum vitae, matching the submitted application CV."
+>
+  <div class="wrap">
+    <header class="head">
+      <h1 class="page-title">Oghenetejiri Jesse</h1>
+      <p class="meta">Curriculum vitae</p>
+    </header>
+
+    <div class="prose">
+      <blockquote>
+        <p>
+          <strong>PENDING — clause 07.</strong> The CV is owner-supplied and
+          must match the submitted application CV exactly, including every
+          figure. It is typeset here in HTML at measure width; nothing is
+          summarised, reordered or rounded.
+        </p>
+        <p>
+          Rule 15.1 requires one reconciliation pass before content freeze:
+          every figure in <code>status</code>, <code>years</code> and every
+          number in every case study body is checked against this document, not
+          against memory.
+        </p>
+      </blockquote>
+
+      <p>
+        <a class="link" href={pdf} download>Download as PDF</a>
+      </p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .head {
+    padding-top: var(--s6);
+    margin-bottom: var(--s5);
+    display: grid;
+    gap: var(--s1);
+  }
+</style>

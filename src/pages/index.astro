@@ -1,0 +1,71 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ProjectFrame from '../components/ProjectFrame.astro';
+import { thesis, PENDING } from '../copy';
+
+/**
+ * Clause 04. One sentence, five framed projects, footer.
+ *
+ * No hero image, no video, no scroll cue, no grid, no carousel and no
+ * scroll-triggered reveal — rule 04.2 and clause 11. The index sells the
+ * human context; the interior delivers the thinking.
+ */
+const projects = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+// Clause 04's thesis line. Owner-supplied copy, max 22 words, and it replaces
+// any tagline, headline or role description. Nothing goes beneath it.
+const words = thesis.trim().split(/\s+/).length;
+if (!thesis.startsWith(PENDING) && words > 22) {
+  throw new Error(`Clause 04: the thesis line is ${words} words. Maximum is 22.`);
+}
+---
+
+<Base
+  title="Tejiri Jesse"
+  description={thesis}
+>
+  <div class="wrap">
+    <h1 class="thesis">{thesis}</h1>
+  </div>
+
+  <div class="frames">
+    {
+      projects.map((project, i) => (
+        <ProjectFrame
+          href={`/${project.id}`}
+          image={project.data.indexImage}
+          alt={project.data.indexAlt}
+          caption={project.data.indexCaption}
+          name={project.data.name}
+          oneLine={project.data.oneLine}
+          sector={project.data.sector}
+          years={project.data.years}
+          status={project.data.status}
+          eager={i === 0}
+        />
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  h1 {
+    padding-top: var(--s5);
+  }
+
+  .frames {
+    /* Clause 04: 160px of air below the thesis line, then the frames. */
+    margin-top: 160px;
+    display: grid;
+    gap: var(--frame-air);
+  }
+
+  @media (max-width: 640px) {
+    .frames {
+      margin-top: var(--s6);
+    }
+  }
+</style>

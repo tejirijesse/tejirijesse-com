@@ -1,0 +1,105 @@
+---
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+/**
+ * Clause 03. Global nav: Tejiri Jesse top-left linking home, About and CV
+ * top-right. Nothing else, and not sticky.
+ */
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const path = Astro.url.pathname;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+
+    <!-- Clause 13: two font files, preloaded. -->
+    <link
+      rel="preload"
+      href="/fonts/ibm-plex-sans-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/ibm-plex-mono-latin-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!-- Clause 14: no analytics, no third-party scripts of any kind. -->
+  </head>
+
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header>
+      <nav class="wrap nav" aria-label="Primary">
+        <a class="home" href="/" aria-current={path === '/' ? 'page' : undefined}>
+          Tejiri Jesse
+        </a>
+        <span class="right">
+          <a href="/about" aria-current={path === '/about' ? 'page' : undefined}>About</a>
+          <a href="/cv" aria-current={path === '/cv' ? 'page' : undefined}>CV</a>
+        </span>
+      </nav>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--s3);
+    padding-top: var(--s4);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+  }
+
+  .right {
+    display: flex;
+    gap: var(--s3);
+  }
+
+  .nav a {
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: text-decoration-color 120ms ease-out;
+  }
+
+  .nav a:hover,
+  .nav a:focus-visible,
+  .nav a[aria-current='page'] {
+    text-decoration-color: var(--accent);
+  }
+
+  .home {
+    font-weight: 500;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav a {
+      transition: none;
+    }
+  }
+</style>

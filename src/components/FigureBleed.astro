@@ -1,0 +1,49 @@
+---
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+/**
+ * Clause 10. Full-viewport-width image, caption returned to measure width
+ * beneath. Photographs only — diagrams and UI go in FigureInline, because a
+ * diagram scaled to 1920px has labels no one can read at either size.
+ *
+ * Caption is required by the type system. Rule 05.3: if the caption cannot be
+ * written, the image is deleted, so there is no way to render one without.
+ */
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  caption: string;
+}
+const { src, alt, caption } = Astro.props;
+---
+
+<figure class="bleed">
+  <Picture
+    src={src}
+    alt={alt}
+    formats={['avif']}
+    fallbackFormat="webp"
+    widths={[640, 900, 1280, 1920, 2560]}
+    sizes="100vw"
+    loading="lazy"
+    decoding="async"
+    data-fade
+  />
+  <figcaption class="wrap">
+    <span class="caption measure">{caption}</span>
+  </figcaption>
+</figure>
+
+<style>
+  /* margin-block only: the inline margins belong to .bleed. */
+  figure {
+    margin-block: var(--s5);
+  }
+  figcaption {
+    display: block;
+  }
+  .caption {
+    display: block;
+  }
+</style>

@@ -1,0 +1,40 @@
+---
+/**
+ * Clause 10. sector · years · status · role, mono uppercase, middot
+ * separated, wraps on narrow.
+ *
+ * Status is printed as a word, not a colour or a dot, because a coloured
+ * pill is a badge and clause 09 rules the accent out of badges.
+ */
+interface Props {
+  sector: string;
+  years: string;
+  status: 'live' | 'pilot' | 'paused' | 'closed';
+  role?: string;
+}
+const { sector, years, status, role } = Astro.props;
+const parts = [sector, years, status, role].filter(Boolean) as string[];
+---
+
+<p class="meta row">
+  {
+    parts.map((part, i) => (
+      <>
+        {i > 0 && <span class="dot" aria-hidden="true">·</span>}
+        <span>{part}</span>
+      </>
+    ))
+  }
+</p>
+
+<style>
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--s1);
+    margin: 0;
+  }
+  .dot {
+    color: var(--rule);
+  }
+</style>

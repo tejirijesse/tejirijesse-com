@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+import { aboutIntro, essay, PENDING } from '../copy';
+
+/**
+ * Clause 06. Not a biography. 600 to 800 words, first person, plus one short
+ * essay below it on the same page — no separate route.
+ *
+ * The photograph is contained at measure width rather than full-bleed, per
+ * clause 06, because a full-bleed portrait is the centre-weighted hero the
+ * reference set explicitly rejects.
+ */
+const words = aboutIntro.trim().split(/\s+/).length;
+const pending = aboutIntro.startsWith(PENDING);
+---
+
+<Base title="About — Tejiri Jesse" description="Why he designs.">
+  <div class="wrap">
+    <header class="head">
+      <h1 class="page-title">About</h1>
+    </header>
+
+    <div class="prose">
+      <p>{aboutIntro}</p>
+      {
+        !pending && (words < 600 || words > 800) && (
+          <p class="warn">
+            Clause 06: this text is {words} words. The range is 600 to 800.
+          </p>
+        )
+      }
+
+      <blockquote>
+        <p>
+          <strong>ASSET PENDING — clause 06.</strong> One photograph of the
+          owner, working rather than posed, contained at measure width. Not a
+          headshot.
+        </p>
+      </blockquote>
+
+      <hr />
+
+      <h2>{essay.title}</h2>
+      <p>{essay.body}</p>
+
+      <hr />
+
+      <h2>OTJ Capital</h2>
+      <p>
+        <strong>TO WRITE — Tejiri.</strong> Clause 06: if OTJ Capital is not
+        given its own frame, its one-sentence status note lives here. It
+        currently has a frame at <a class="link" href="/otj">/otj</a>, so this
+        section comes out — or the frame does. One of the two, before freeze.
+      </p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .head {
+    padding-top: var(--s6);
+    margin-bottom: var(--s5);
+  }
+  .warn {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--accent);
+  }
+</style>

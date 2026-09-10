@@ -1,0 +1,113 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import MetaRow from '../components/MetaRow.astro';
+import FilmBlock from '../components/FilmBlock.astro';
+import NextProject from '../components/NextProject.astro';
+
+/**
+ * Clause 05. One template, five uses. Long-form, single column,
+ * reading-first. Flat routes — /axk, /justly — with no /work prefix, per
+ * clause 03.
+ *
+ * There is no hero image here. The index image already did that job, and
+ * repeating it is the thing that makes a portfolio feel like a template.
+ */
+export async function getStaticPaths() {
+  const projects = (await getCollection('projects')).sort(
+    (a, b) => a.data.order - b.data.order
+  );
+
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: {
+      project,
+      // Clause 03: each page ends with a link to the next, wrapping at the
+      // end, so a reader can traverse all five without returning to the index.
+      next: projects[(i + 1) % projects.length],
+    },
+  }));
+}
+
+const { project, next } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+---
+
+<Base title={`${data.name} — Tejiri Jesse`} description={data.oneLine}>
+  <article>
+    <header class="wrap title-block">
+      <h1 class="page-title">{data.name}</h1>
+      <p class="lede">{data.oneLine}</p>
+      <MetaRow
+        sector={data.sector}
+        years={data.years}
+        status={data.status}
+        role={data.role}
+      />
+    </header>
+
+    <figure class="opening">
+      <Picture
+        src={data.indexImage}
+        alt={data.indexAlt}
+        formats={['avif']}
+        fallbackFormat="webp"
+        widths={[640, 900, 1280, 1920, 2560]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="sync"
+      />
+      <figcaption class="wrap">
+        <span class="caption measure">{data.indexCaption}</span>
+      </figcaption>
+    </figure>
+
+    <div class="wrap">
+      <div class="prose">
+        <Content />
+      </div>
+
+      {
+        data.film && (
+          <FilmBlock
+            src={data.film.src}
+            poster={data.film.poster}
+            posterAlt={data.film.posterAlt}
+            credit={data.film.credit}
+            runtime={data.film.runtime}
+            title={`${data.name} — film`}
+          />
+        )
+      }
+
+      <NextProject href={`/${next.id}`} name={next.data.name} />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .title-block {
+    padding-top: var(--s6);
+    display: grid;
+    gap: var(--s2);
+    max-width: var(--container);
+  }
+
+  .title-block :global(.lede),
+  .title-block :global(.meta) {
+    max-width: var(--measure);
+  }
+
+  .opening {
+    margin: var(--s5) 0 var(--s6);
+    width: 100%;
+  }
+
+  .opening .caption {
+    display: block;
+  }
+
+</style>

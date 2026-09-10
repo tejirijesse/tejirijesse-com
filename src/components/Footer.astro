@@ -1,0 +1,76 @@
+---
+/**
+ * Clause 08. Three lines, identical on every page. No newsletter capture, no
+ * contact form, no map, no call to action.
+ *
+ * The social links are text, not icons, and carry no follower counts. Every
+ * one must resolve before launch — clause 17.11. Those marked unconfirmed in
+ * the specification are commented out rather than shipped broken, because a
+ * dead link on a portfolio is read as carelessness.
+ */
+const socials = [
+  { name: 'YouTube', href: 'https://youtube.com/@tejirijesse' },
+  { name: 'Instagram', href: 'https://instagram.com/tejirijesse' },
+  { name: 'X', href: 'https://x.com/tejirijesse' },
+  // LinkedIn: owner to supply the handle. Clause 08.
+  { name: 'GitHub', href: 'https://github.com/tejirijesse' },
+];
+---
+
+<footer>
+  <div class="wrap">
+    <p class="email"><a class="link" href="mailto:tejiri@axk.org">tejiri@axk.org</a></p>
+
+    <p class="socials">
+      {
+        socials.map((social, i) => (
+          <>
+            {i > 0 && <span class="dot" aria-hidden="true">·</span>}
+            <a class="link" href={social.href} rel="me">
+              {social.name}
+            </a>
+          </>
+        ))
+      }
+    </p>
+
+    <p class="colophon">
+      Set in IBM Plex. Built with Astro. © 2026 Oghenetejiri Jesse.
+    </p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    margin-top: var(--s8);
+    padding-block: var(--s5);
+  }
+
+  p {
+    margin: 0 0 var(--s2);
+  }
+
+  .email {
+    font-size: 17px;
+  }
+
+  .socials {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--s1);
+    color: var(--muted);
+  }
+
+  .socials .dot {
+    color: var(--rule);
+  }
+
+  .colophon {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-bottom: 0;
+  }
+</style>

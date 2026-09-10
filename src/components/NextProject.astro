@@ -1,0 +1,24 @@
+---
+/**
+ * Clause 10 and clause 03. A single text link at the end of every case study,
+ * so a reader can traverse all five without returning to the index.
+ */
+interface Props {
+  href: string;
+  name: string;
+}
+const { href, name } = Astro.props;
+---
+
+<nav class="next" aria-label="Next project">
+  <a class="link" href={href}>Next: {name}</a>
+</nav>
+
+<style>
+  .next {
+    margin-top: var(--s6);
+    padding-top: var(--s4);
+    border-top: 1px solid var(--rule);
+    font-size: 19px;
+  }
+</style>
